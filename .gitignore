@@ -1,0 +1,4 @@
+cmbuild/
+blas/
+lapack/
+.svn
