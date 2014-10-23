@@ -1,4 +1,4 @@
-cmbuild/
-blas/
-lapack/
+bin/
+build/
 .svn
+*.testout
