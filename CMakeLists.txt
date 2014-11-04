@@ -1,14 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 project (HYPRE VERSION 2.9.0 LANGUAGES C Fortran)
 
-if (OPENCMISS_DEPENDENCIES_LIBRARIES)
-    SET(CMAKE_PREFIX_PATH ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR} ${CMAKE_PREFIX_PATH})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
-else()
-    SET(CMAKE_PREFIX_PATH ../cmake ${CMAKE_PREFIX_PATH})
-    SET(OPENCMISS_DEPENDENCIES_CONFIGS_DIR ${CMAKE_CURRENT_BINARY_DIR})
-    SET(BUILD_TESTING ON)
-endif()
+option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 
 find_package(BLAS CONFIG REQUIRED)
 find_package(LAPACK CONFIG REQUIRED)
@@ -129,11 +122,15 @@ add_library(hypre STATIC ${HYPRE_SOURCES} ${FEI_LIBS})
 set_target_properties(hypre PROPERTIES OUTPUT_NAME hypre-${HYPRE_VERSION})
 target_link_libraries(hypre PUBLIC blas lapack)
 
-export(TARGETS hypre FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/hypre-${HYPRE_VERSION}/hypre-config.cmake)
+install(TARGETS hypre EXPORT hypre-config
+    DESTINATION lib
+    INCLUDES DESTINATION include)
+install(EXPORT hypre-config DESTINATION lib/cmake)   
 include(CMakePackageConfigHelpers)
-WRITE_BASIC_PACKAGE_VERSION_FILE(${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/hypre-${HYPRE_VERSION}/hypre-config-version.cmake
-    VERSION ${HYPRE_VERSION} COMPATIBILITY AnyNewerVersion)
+WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
+    COMPATIBILITY AnyNewerVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake DESTINATION lib/cmake)   
 
-if (BUILD_TESTING)
+if (BUILD_TESTS)
     add_subdirectory (test)
 endif()
