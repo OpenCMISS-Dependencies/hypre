@@ -129,7 +129,8 @@ install(EXPORT hypre-config DESTINATION lib/cmake)
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
     COMPATIBILITY AnyNewerVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake DESTINATION lib/cmake)   
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake DESTINATION lib/cmake)
+install(FILES HYPRE.h HYPREf.h DESTINATION include)   
 
 if (BUILD_TESTS)
     add_subdirectory (test)
