@@ -124,13 +124,14 @@ target_link_libraries(hypre PUBLIC blas lapack)
 
 install(TARGETS hypre EXPORT hypre-config
     DESTINATION lib
-    INCLUDES DESTINATION include)
+    INCLUDES DESTINATION include/hypre)
 install(EXPORT hypre-config DESTINATION lib/cmake)   
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
     COMPATIBILITY AnyNewerVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake DESTINATION lib/cmake)
-install(FILES HYPRE.h HYPREf.h DESTINATION include)   
+file(GLOB_RECURSE headers "HYPRE*.h" "_hypre_*.h" "fortran*.h" "multivector/*.h")
+install(FILES ${headers} ${PROJECT_BINARY_DIR}/HYPRE_config.h DESTINATION include/hypre)
 
 if (BUILD_TESTS)
     add_subdirectory (test)
