@@ -3,8 +3,8 @@ project (HYPRE VERSION 2.9.0 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 
-find_package(BLAS CONFIG REQUIRED)
-find_package(LAPACK CONFIG REQUIRED)
+find_package(BLAS ${BLAS_VERSION} CONFIG REQUIRED)
+find_package(LAPACK ${LAPACK_VERSION} CONFIG REQUIRED)
 
 # The version number.
 #set (HYPRE_VERSION 2.9.0b)
