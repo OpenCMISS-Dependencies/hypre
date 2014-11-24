@@ -33,14 +33,26 @@ if (NOT HYPRE_SEQUENTIAL)
   SET(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
 endif()
 
-# Exported the long source and header collection to separate file
-include(./CollectSources.cmake)
+# Set OpenMP compile flags
+if (HYPRE_USING_OPENMP)
+  find_package(OpenMP)
+  if (OPENMP_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
+  else()
+    SET(HYPRE_USING_OPENMP FALSE)
+  endif()
+endif()
 
 # Configure a header file to pass CMake settings to the source code
 configure_file (
   "${PROJECT_SOURCE_DIR}/config/HYPRE_config.h.cmake.in"
   "${PROJECT_BINARY_DIR}/HYPRE_config.h"
   )
+
+# Exported the long source and header collection to separate file
+include(./CollectSources.cmake)
 
 include_directories(${HYPRE_SOURCE_DIR})
 include_directories(${HYPRE_BINARY_DIR})
@@ -80,16 +92,6 @@ endif ()
 #    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MPI_CXX_COMPILE_FLAGS}")
 #  endif ()
 #endif()
-
-# Set OpenMP compile flags
-if (HYPRE_USING_OPENMP)
-  find_package(OpenMP)
-  if (OPENMP_FOUND)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} ${OpenMP_Fortran_FLAGS}")
-  endif()
-endif()
 
 # Turn optimization off for this file
 #set_source_files_properties (lapack/dlamch.c PROPERTIES COMPILE_FLAGS -O0)
