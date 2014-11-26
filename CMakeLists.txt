@@ -104,7 +104,7 @@ if (HYPRE_USING_FEI)
   add_subdirectory(FEI_mv)
 endif ()
 
-add_library(hypre STATIC ${HYPRE_SOURCES} ${FEI_LIBS})
+add_library(hypre ${HYPRE_SOURCES} ${FEI_LIBS})
 set_target_properties(hypre PROPERTIES OUTPUT_NAME hypre-${HYPRE_VERSION})
 target_link_libraries(hypre PUBLIC blas lapack)
 
