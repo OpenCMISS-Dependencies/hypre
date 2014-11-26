@@ -4,7 +4,6 @@ project (HYPRE VERSION 2.9.0 LANGUAGES C Fortran)
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 
 # Configuration options
-option(HYPRE_SHARED               "Build a shared library" OFF)
 option(HYPRE_BIGINT               "Use long long int for HYPRE_Int" OFF)
 option(HYPRE_SEQUENTIAL           "Compile without MPI" OFF)
 option(HYPRE_TIMING               "Use HYPRE timing routines" OFF)
@@ -73,13 +72,6 @@ include_directories(struct_mv)
 include_directories(struct_ls)
 include_directories(sstruct_mv)
 include_directories(sstruct_ls)
-
-# Set library build type
-if (HYPRE_SHARED)
-  set (BUILD_SHARED_LIBS ON CACHE INTERNAL "" FORCE)
-else ()
-  set (BUILD_SHARED_LIBS OFF CACHE INTERNAL "" FORCE)
-endif ()
 
 # Set MPI compile flags (done by compiler wrapper!)
 #if (NOT HYPRE_SEQUENTIAL)
