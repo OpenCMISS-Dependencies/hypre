@@ -26,21 +26,27 @@
 #define HYPRE_FORT_HEADER
 
 #include "_hypre_utilities.h"
+// CMake generated mangling header
+#include <HYPRE_FC.h>
+#define hypre_F90_NAME(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
+#define hypre_F90_IFACE(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
+#define hypre_F90_NAME_BLAS(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
+#define hypre_F90_NAME_LAPACK(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
 
 /*-------------------------------------------------------
  * Define specific name mangling macros to be used below
  *-------------------------------------------------------*/
 
-#define hypre_F90_NAME_1(name,NAME) name
+/*#define hypre_F90_NAME_1(name,NAME) name
 #define hypre_F90_NAME_2(name,NAME) name##_
 #define hypre_F90_NAME_3(name,NAME) name##__
-#define hypre_F90_NAME_4(name,NAME) NAME
+#define hypre_F90_NAME_4(name,NAME) NAME*/
 
 /*-------------------------------------------------------
  * Define hypre_F90_NAME and hypre_F90_IFACE
  *-------------------------------------------------------*/
 
-#if   (HYPRE_FMANGLE == 1)
+/*#if   (HYPRE_FMANGLE == 1)
 #define hypre_F90_NAME(name,NAME) hypre_F90_NAME_1(name,NAME)
 #elif (HYPRE_FMANGLE == 2)
 #define hypre_F90_NAME(name,NAME) hypre_F90_NAME_2(name,NAME)
@@ -50,7 +56,9 @@
 #define hypre_F90_NAME(name,NAME) hypre_F90_NAME_4(name,NAME)
 
 #elif defined(HYPRE_F77_FUNC_)
+*/
 /* HYPRE_F77_FUNC_ macro assumes underscores exist in name */
+/*
 #define hypre_F90_NAME(name,NAME) HYPRE_F77_FUNC_(name,NAME)
 
 #else
@@ -59,11 +67,12 @@
 #endif
 
 #define hypre_F90_IFACE(name,NAME) hypre_F90_NAME(name,NAME)
+*/
 
 /*-------------------------------------------------------
  * Define hypre_F90_NAME_BLAS
  *-------------------------------------------------------*/
-
+/*
 #ifdef HYPRE_USING_HYPRE_BLAS
 #define hypre_F90_NAME_BLAS(name,NAME)  hypre_##name
 
@@ -77,18 +86,21 @@
 #define hypre_F90_NAME_BLAS(name,NAME) hypre_F90_NAME_4(name,NAME)
 
 #elif defined(HYPRE_F77_FUNC)
+*/
 /* HYPRE_F77_FUNC macro assumes NO underscores exist in name */
+/*
 #define hypre_F90_NAME_BLAS(name,NAME) HYPRE_F77_FUNC(name,NAME)
 
 #else
 #define hypre_F90_NAME_BLAS(name,NAME) hypre_F90_NAME_2(name,NAME)
 
 #endif
+*/
 
 /*-------------------------------------------------------
  * Define hypre_F90_NAME_LAPACK
  *-------------------------------------------------------*/
-
+/*
 #ifdef HYPRE_USING_HYPRE_LAPACK
 #define hypre_F90_NAME_LAPACK(name,NAME)  hypre_##name
 
@@ -102,13 +114,16 @@
 #define hypre_F90_NAME_LAPACK(name,NAME) hypre_F90_NAME_4(name,NAME)
 
 #elif defined(HYPRE_F77_FUNC)
+*/
 /* HYPRE_F77_FUNC macro assumes NO underscores exist in name */
+/*
 #define hypre_F90_NAME_LAPACK(name,NAME) HYPRE_F77_FUNC(name,NAME)
 
 #else
 #define hypre_F90_NAME_LAPACK(name,NAME) hypre_F90_NAME_2(name,NAME)
 
 #endif
+*/
 
 /*-------------------------------------------------------
  * Define interface argument types and macros

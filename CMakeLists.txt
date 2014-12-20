@@ -28,8 +28,15 @@ find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 if (NOT HYPRE_SEQUENTIAL)
   find_package(MPI REQUIRED)
-  SET(CMAKE_C_COMPILER ${MPI_C_COMPILER})
-  SET(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
+  if (MPI_C_COMPILER)
+      SET(CMAKE_C_COMPILER ${MPI_C_COMPILER})
+      SET(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
+  else()
+      include_directories(${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
+  endif()
+  include(Functions.cmake)
+  SET(CMAKE_REQUIRED_INCLUDES ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
+  trycompile(HYPRE_HAVE_MPI_COMM_F2C "#include <mpi.h>" "if (MPI_Comm_f2c((MPI_Fint)0));" c)
 endif()
 
 # Set OpenMP compile flags
@@ -45,13 +52,19 @@ if (HYPRE_USING_OPENMP)
 endif()
 
 # Configure a header file to pass CMake settings to the source code
-configure_file (
+configure_file(
   "${PROJECT_SOURCE_DIR}/config/HYPRE_config.h.cmake.in"
   "${PROJECT_BINARY_DIR}/HYPRE_config.h"
   )
 
 # Exported the long source and header collection to separate file
 include(./CollectSources.cmake)
+
+# Fortran mangling - new CMake scheme
+include(FortranCInterface)
+FortranCInterface_HEADER(${CMAKE_CURRENT_BINARY_DIR}/HYPRE_FC.h
+    MACRO_NAMESPACE "HYPRE_FMANGLE_")
+LIST(APPEND HYPRE_HEADERS ${CMAKE_CURRENT_BINARY_DIR}/HYPRE_FC.h)
 
 include_directories(${HYPRE_SOURCE_DIR})
 include_directories(${HYPRE_BINARY_DIR})

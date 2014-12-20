@@ -40,26 +40,6 @@
 /* Use OpenMP */
 #cmakedefine HYPRE_USING_OPENMP
 
-/* #undef HYPRE_HAVE_MPI */
-/* #undef HYPRE_HAVE_MPI_COMM_F2C */
+#cmakedefine HYPRE_HAVE_MPI
 
-/* Define as follows to set the Fortran name mangling scheme:
- * 0 = unspecified
- * 1 = no underscores
- * 2 = one underscore
- * 3 = two underscores
- * 4 = caps, no underscores */
-#define HYPRE_FMANGLE 0
-
-/* Define as in HYPRE_FMANGLE to set the BLAS name mangling scheme */
-#define HYPRE_FMANGLE_BLAS 0
-
-/* Define as in HYPRE_FMANGLE to set the LAPACK name mangling scheme */
-#define HYPRE_FMANGLE_LAPACK 0
-
-/* Define to a macro mangling the given C identifier (in lower and upper
- * case), which must not contain underscores, for linking with Fortran. */
-#define HYPRE_F77_FUNC(name,NAME) name ## _
-
-/* As F77_FUNC, but for C identifiers containing underscores. */
-#define HYPRE_F77_FUNC_(name,NAME) name ## __
+#cmakedefine HYPRE_HAVE_MPI_COMM_F2C
