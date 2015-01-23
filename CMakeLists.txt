@@ -111,7 +111,7 @@ endif ()
 
 add_library(hypre ${HYPRE_SOURCES} ${FEI_LIBS})
 set_target_properties(hypre PROPERTIES OUTPUT_NAME hypre-${HYPRE_VERSION})
-target_link_libraries(hypre PUBLIC blas lapack)
+target_link_libraries(hypre PUBLIC blas lapack ${MPI_C_LIBRARIES})
 
 install(TARGETS hypre EXPORT hypre-config
     DESTINATION lib
