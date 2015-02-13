@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.0)
 project (HYPRE VERSION 2.9.0 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+option(PACKAGE_CONFIG_DIR "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)" "lib/cmake")
 
 # Configuration options
 option(HYPRE_BIGINT               "Use long long int for HYPRE_Int" OFF)
@@ -116,7 +117,7 @@ target_link_libraries(hypre PUBLIC blas lapack ${MPI_C_LIBRARIES})
 install(TARGETS hypre EXPORT hypre-config
     DESTINATION lib
     INCLUDES DESTINATION include/hypre)
-install(EXPORT hypre-config DESTINATION lib/cmake)   
+install(EXPORT hypre-config DESTINATION ${PACKAGE_CONFIG_DIR})   
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
     COMPATIBILITY AnyNewerVersion)
