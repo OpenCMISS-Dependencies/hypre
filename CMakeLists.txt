@@ -35,9 +35,9 @@ if (NOT HYPRE_SEQUENTIAL)
   else()
       include_directories(${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
   endif()
-  include(Functions.cmake)
+  include(CheckSymbolExists)
   SET(CMAKE_REQUIRED_INCLUDES ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
-  trycompile(HYPRE_HAVE_MPI_COMM_F2C "#include <mpi.h>" "if (MPI_Comm_f2c((MPI_Fint)0));" c)
+  CHECK_SYMBOL_EXISTS(MPI_Comm_f2c mpi.h HYPRE_HAVE_MPI_COMM_F2C)
 endif()
 
 # Set OpenMP compile flags
