@@ -87,18 +87,6 @@ include_directories(struct_ls)
 include_directories(sstruct_mv)
 include_directories(sstruct_ls)
 
-# Set MPI compile flags (done by compiler wrapper!)
-#if (NOT HYPRE_SEQUENTIAL)
-#  if ((MPI_C_FOUND) AND (NOT CMAKE_C_COMPILER STREQUAL MPI_C_COMPILER))
-#    include_directories (${MPI_C_INCLUDE_PATH})
-#    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${MPI_C_COMPILE_FLAGS}")
-#  endif ()
-#  if ((MPI_CXX_FOUND) AND (NOT CMAKE_CXX_COMPILER STREQUAL MPI_CXX_COMPILER))
-#    include_directories (${MPI_CXX_INCLUDE_PATH})
-#    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${MPI_CXX_COMPILE_FLAGS}")
-#  endif ()
-#endif()
-
 # Turn optimization off for this file
 #set_source_files_properties (lapack/dlamch.c PROPERTIES COMPILE_FLAGS -O0)
 
@@ -118,11 +106,24 @@ install(TARGETS hypre EXPORT hypre-config
     DESTINATION lib
     INCLUDES DESTINATION include/hypre)
 install(EXPORT hypre-config DESTINATION ${PACKAGE_CONFIG_DIR})   
+install(FILES ${HYPRE_HEADERS} ${PROJECT_BINARY_DIR}/HYPRE_config.h DESTINATION include/hypre)
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
     COMPATIBILITY AnyNewerVersion)
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake DESTINATION ${PACKAGE_CONFIG_DIR})
-install(FILES ${HYPRE_HEADERS} ${PROJECT_BINARY_DIR}/HYPRE_config.h DESTINATION include/hypre)
+file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake 
+    "include(CMakeFindDependencyMacro)\r\n"
+    "set(_OLD_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
+)
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_dependency(BLAS ${BLAS_VERSION})\r\n")
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_dependency(LAPACK ${LAPACK_VERSION})\r\n")
+if (WITH_OPENMP)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_dependency(OpenMP)\r\n")
+endif()
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "set(_IMPORT_PREFIX \${_OLD_IMPORT_PREFIX})")
+install(FILES 
+    ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake
+    DESTINATION ${PACKAGE_CONFIG_DIR})
 
 if (BUILD_TESTS)
     add_subdirectory (test)
