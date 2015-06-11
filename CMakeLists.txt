@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.0)
 project (HYPRE VERSION 2.9.0 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
-option(PACKAGE_CONFIG_DIR "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)" "lib/cmake")
+set(PACKAGE_CONFIG_DIR "lib/cmake" CACHE STRING "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)")
 
 # Configuration options
 option(HYPRE_BIGINT               "Use long long int for HYPRE_Int" OFF)
