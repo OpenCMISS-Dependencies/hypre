@@ -110,7 +110,7 @@ int MLI_Solver_SeqSuperLU::setup( MLI_Matrix *Amat )
    int      nrows, iP, startRow, nnz, *csrIA, *csrJA, *cscJA, *cscIA;
    int      irow, icol, *rowArray, *countArray, colNum, index, nSubRows;
    int      *etree, permcSpec, lwork, panelSize, relax, info, rowCnt;
-   double   *csrAA, *cscAA, diagPivotThresh, dropTol;
+   double   *csrAA, *cscAA, diagPivotThresh;
    hypre_ParCSRMatrix  *hypreA;
    hypre_CSRMatrix     *ADiag;
    SuperMatrix         AC, superLU_Amat;
@@ -282,12 +282,11 @@ fclose(fp);
          slu_options.SymmetricMode = NO;
          sp_preorder(&slu_options, &superLU_Amat, permCs_[iP], etree, &AC);
          diagPivotThresh = 1.0;
-         dropTol = 0.0;
          panelSize = sp_ienv(1);
          relax = sp_ienv(2);
          StatInit(&slu_stat);
          lwork = 0;
-         dgstrf(&slu_options, &AC, dropTol, relax, panelSize,
+         dgstrf(&slu_options, &AC, relax, panelSize,
                 etree,NULL,lwork,permCs_[iP],permRs_[iP],
                 &(superLU_Lmats[iP]),&(superLU_Umats[iP]),&slu_stat,&info);
          Destroy_CompCol_Permuted(&AC);
@@ -353,12 +352,11 @@ fclose(fp);
          slu_options.SymmetricMode = NO;
          sp_preorder(&slu_options, &superLU_Amat, permCs_[iP], etree, &AC);
          diagPivotThresh = 1.0;
-         dropTol = 0.0;
          panelSize = sp_ienv(1);
          relax = sp_ienv(2);
          StatInit(&slu_stat);
          lwork = 0;
-         dgstrf(&slu_options, &AC, dropTol, relax, panelSize,
+         dgstrf(&slu_options, &AC, relax, panelSize,
                 etree,NULL,lwork,permRs_[iP],permCs_[iP],&(superLU_Lmats[iP]),
                 &(superLU_Umats[iP]),&slu_stat,&info);
          Destroy_CompCol_Permuted(&AC);

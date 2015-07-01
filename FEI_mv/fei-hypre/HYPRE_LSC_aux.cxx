@@ -4902,7 +4902,7 @@ double HYPRE_LinSysCore::solveUsingSuperLUX(int& status)
    slu_options.Equil        = YES;
    slu_options.Trans        = NOTRANS;
    slu_options.Fact         = DOFACT;
-   slu_options.IterRefine   = DOUBLE;
+   slu_options.IterRefine   = SLU_DOUBLE;
    slu_options.DiagPivotThresh = 1.0;
    slu_options.PivotGrowth = YES;
    slu_options.ConditionNumber = YES;

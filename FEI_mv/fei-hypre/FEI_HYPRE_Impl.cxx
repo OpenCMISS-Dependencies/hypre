@@ -3408,7 +3408,6 @@ int FEI_HYPRE_Impl::solveUsingSuperLU()
    slu_options.SymmetricMode = NO;
    sp_preorder(&slu_options, &superLU_Amat, permC, etree, &AC);
    diagPivotThresh = 1.0;
-   dropTol = 0.0;
    panelSize = sp_ienv(1);
    relax = sp_ienv(2);
    StatInit(&slu_stat);
@@ -3417,7 +3416,7 @@ int FEI_HYPRE_Impl::solveUsingSuperLU()
    slu_options.Fact = DOFACT;
    slu_options.DiagPivotThresh = diagPivotThresh;
 
-   dgstrf(&slu_options, &AC, dropTol, relax, panelSize,
+   dgstrf(&slu_options, &AC, relax, panelSize,
           etree, NULL, lwork, permC, permR, &superLU_Lmat,
           &superLU_Umat, &slu_stat, &info);
 
