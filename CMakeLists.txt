@@ -18,7 +18,6 @@ SET(HYPRE_USING_OPENMP ${WITH_OPENMP})
 option(HYPRE_USING_FEI            "Use FEI" ON)
 option(HYPRE_USING_MLI            "Use MLI" ON)
 option(WITH_SUPERLU "Use SuperLU routines (only applicable if FEI is built)" ON)
-set(SUPERLU_VERSION 4.3)
 
 if (HYPRE_BIGINT)
   set (HYPRE_USING_FEI OFF CACHE BOOL "" FORCE)
@@ -113,8 +112,13 @@ endif ()
 add_library(hypre ${HYPRE_SOURCES} ${FEI_LIBS})
 set_target_properties(hypre PROPERTIES OUTPUT_NAME hypre-${HYPRE_VERSION})
 target_link_libraries(hypre PUBLIC blas lapack ${MPI_C_LIBRARIES})
-if (HYPRE_USING_FEI AND WITH_SUPERLU)
-    target_link_libraries(hypre PUBLIC superlu)    
+if (HYPRE_USING_FEI)
+    target_include_directories(hypre PUBLIC 
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/FEI_mv/fei-base>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/FEI_mv/fei-hypre>)
+    if (WITH_SUPERLU)
+        target_link_libraries(hypre PUBLIC superlu)
+    endif()    
 endif()
 
 install(TARGETS hypre EXPORT hypre-config
@@ -144,5 +148,6 @@ install(FILES
     DESTINATION ${PACKAGE_CONFIG_DIR})
 
 if (BUILD_TESTS)
+    enable_testing()
     add_subdirectory(test)
 endif()

@@ -19,26 +19,15 @@ if (MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 endif ()
 
-add_executable (ij ij.c)
-target_link_libraries (ij hypre ${HYPRE_LIBS})
- 
-add_executable (ij_mv ij_mv.c)
-target_link_libraries (ij_mv hypre ${HYPRE_LIBS})
- 
-add_executable (new_ij new_ij.c)
-target_link_libraries (new_ij hypre ${HYPRE_LIBS})
- 
-add_executable (sstruct sstruct.c)
-target_link_libraries (sstruct hypre ${HYPRE_LIBS})
- 
-add_executable (struct struct.c)
-target_link_libraries (struct hypre ${HYPRE_LIBS})
- 
-add_executable (ams_driver ams_driver.c)
-target_link_libraries (ams_driver hypre ${HYPRE_LIBS})
-
-add_executable (maxwell_unscaled maxwell_unscaled.c)
-target_link_libraries (maxwell_unscaled hypre ${HYPRE_LIBS})
- 
-add_executable (sstruct_fac sstruct_fac.c)
-target_link_libraries (sstruct_fac hypre ${HYPRE_LIBS})
+set(TEST_DRIVERS_C
+    ij ij_mv new_ij sstruct struct 
+    ams_driver maxwell_unscaled sstruct_fac
+    ex1_for ex3_for ex5_for ex6_for ex7_for
+    for_maxwell ij_b sstruct_b struct_b)
+if (HYPRE_USING_FEI)
+    list(APPEND TEST_DRIVERS_C fei) #fei_lscore
+endif()    
+foreach(_SRC ${TEST_DRIVERS_C})
+    add_executable(${_SRC} ${_SRC})
+    target_link_libraries (${_SRC} hypre ${HYPRE_LIBS})
+endforeach()
