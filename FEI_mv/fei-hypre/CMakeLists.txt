@@ -66,5 +66,9 @@ set(HYPRE_fei_SRCS
 )
 
 add_library(HYPRE_fei OBJECT ${HYPRE_fei_SRCS})
+if (WITH_SUPERLU AND NOT SUPERLU_INTERNAL)
+    target_include_directories(HYPRE_fei PRIVATE 
+        $<TARGET_PROPERTY:superlu,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
 
-install (FILES ${HYPRE_fei_HEADERS} DESTINATION include)
+install (FILES ${HYPRE_fei_HEADERS} DESTINATION include/hypre)

@@ -1,5 +1,6 @@
 cmake_minimum_required (VERSION 3.0)
-project(HYPRE VERSION 2.10.0b LANGUAGES C Fortran)
+# This is HYPRE version 2.10.0b from http://ftp.mcs.anl.gov/pub/petsc/externalpackages/hypre-2.10.0b.tar.gz
+project(HYPRE VERSION 2.10.0 LANGUAGES C CXX Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 set(PACKAGE_CONFIG_DIR "lib/cmake" CACHE STRING "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)")
@@ -13,7 +14,11 @@ option(HYPRE_PRINT_ERRORS         "Print HYPRE errors" OFF)
 # Slight interface change to accomodate with OpenCMISS standard
 option(WITH_OPENMP "${PROJECT_NAME} - Use OpenMP" ON)
 SET(HYPRE_USING_OPENMP ${WITH_OPENMP})
-option(HYPRE_USING_FEI            "Use FEI" OFF)
+
+option(HYPRE_USING_FEI            "Use FEI" ON)
+option(HYPRE_USING_MLI            "Use MLI" ON)
+option(WITH_SUPERLU "Use SuperLU routines (only applicable if FEI is built)" ON)
+set(SUPERLU_VERSION 4.3)
 
 if (HYPRE_BIGINT)
   set (HYPRE_USING_FEI OFF CACHE BOOL "" FORCE)
@@ -23,11 +28,6 @@ endif ()
 if (HYPRE_SEQUENTIAL)
   set (HYPRE_NO_GLOBAL_PARTITION OFF CACHE BOOL "" FORCE)
 endif ()
-
-#   --with-examples         Build example codes.
-#   --with-fei              Use internal FEI routines.
-#   --with-superlu          Use internal SuperLU routines.
-#   --with-mli              Use MLI
 
 find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
@@ -42,6 +42,14 @@ if (NOT HYPRE_SEQUENTIAL)
   include(CheckSymbolExists)
   SET(CMAKE_REQUIRED_INCLUDES ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
   CHECK_SYMBOL_EXISTS(MPI_Comm_f2c mpi.h HYPRE_HAVE_MPI_COMM_F2C)
+endif()
+# Check for SuperLU if wanted
+set(SUPERLU_INTERNAL NO)
+if (HYPRE_USING_FEI AND WITH_SUPERLU)
+    find_package(SUPERLU ${SUPERLU_VERSION} QUIET)
+    if (NOT SUPERLU_FOUND)
+        set(SUPERLU_INTERNAL YES)            
+    endif()
 endif()
 
 # Set OpenMP compile flags
@@ -105,6 +113,9 @@ endif ()
 add_library(hypre ${HYPRE_SOURCES} ${FEI_LIBS})
 set_target_properties(hypre PROPERTIES OUTPUT_NAME hypre-${HYPRE_VERSION})
 target_link_libraries(hypre PUBLIC blas lapack ${MPI_C_LIBRARIES})
+if (HYPRE_USING_FEI AND WITH_SUPERLU)
+    target_link_libraries(hypre PUBLIC superlu)    
+endif()
 
 install(TARGETS hypre EXPORT hypre-config
     DESTINATION lib
@@ -122,6 +133,9 @@ file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_de
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_dependency(LAPACK ${LAPACK_VERSION})\r\n")
 if (WITH_OPENMP)
     file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_dependency(OpenMP)\r\n")
+endif()
+if (WITH_SUPERLU AND NOT SUPERLU_INTERNAL)
+    file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "find_dependency(SUPERLU)\r\n")
 endif()
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake "set(_IMPORT_PREFIX \${${PROJECT_NAME}_IMPORT_PREFIX})")
 install(FILES 

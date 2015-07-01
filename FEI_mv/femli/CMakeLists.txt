@@ -43,3 +43,7 @@ set(HYPRE_mli_SRCS
 )
 
 add_library(HYPRE_mli OBJECT ${HYPRE_mli_SRCS})
+if (WITH_SUPERLU AND NOT SUPERLU_INTERNAL)
+    target_include_directories(HYPRE_mli PRIVATE 
+        $<TARGET_PROPERTY:superlu,INTERFACE_INCLUDE_DIRECTORIES>)
+endif()
