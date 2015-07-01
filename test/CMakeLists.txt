@@ -64,3 +64,12 @@ target_link_libraries (struct hypre ${HYPRE_LIBS})
  
 add_executable (ams_driver ams_driver.c)
 target_link_libraries (ams_driver hypre ${HYPRE_LIBS})
+
+add_executable (maxwell_unscaled maxwell_unscaled.c)
+target_link_libraries (maxwell_unscaled hypre ${HYPRE_LIBS})
+ 
+add_executable (sstruct_fac sstruct_fac.c)
+target_link_libraries (sstruct_fac hypre ${HYPRE_LIBS})
+ 
+add_executable (ij_mv ij_mv.c)
+target_link_libraries (ij_mv hypre ${HYPRE_LIBS})

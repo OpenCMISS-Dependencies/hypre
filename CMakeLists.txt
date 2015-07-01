@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.0)
-project(HYPRE VERSION 2.9.0 LANGUAGES C Fortran)
+project(HYPRE VERSION 2.10.0b LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 set(PACKAGE_CONFIG_DIR "lib/cmake" CACHE STRING "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)")
@@ -18,6 +18,10 @@ option(HYPRE_USING_FEI            "Use FEI" OFF)
 if (HYPRE_BIGINT)
   set (HYPRE_USING_FEI OFF CACHE BOOL "" FORCE)
   # In the future, also turn off babel
+endif ()
+
+if (HYPRE_SEQUENTIAL)
+  set (HYPRE_NO_GLOBAL_PARTITION OFF CACHE BOOL "" FORCE)
 endif ()
 
 #   --with-examples         Build example codes.
@@ -126,5 +130,5 @@ install(FILES
     DESTINATION ${PACKAGE_CONFIG_DIR})
 
 if (BUILD_TESTS)
-    add_subdirectory (test)
+    add_subdirectory(test)
 endif()

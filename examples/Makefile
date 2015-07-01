@@ -1,41 +1,34 @@
-include ../config/Makefile.config
-
 ########################################################################
 # Compiler and external dependences
 ########################################################################
-#CC        = mpicc
-#F77       = mpif77
-#CXX       = mpicxx
-#F90       = mpif90
+CC        = mpicc
+F77       = mpif77
+CXX       = mpicxx
+F90       = mpif90
 HYPRE_DIR = ../hypre
 
 ########################################################################
 # Compiling and linking options
 ########################################################################
-#COPTS     = -g -Wall
-COPTS     = -g
+COPTS     = -g -Wall
 CINCLUDES = -I$(HYPRE_DIR)/include
 CDEFS     = -DHAVE_CONFIG_H -DHYPRE_TIMING
-#CFLAGS    = $(COPTS) $(CINCLUDES) $(CDEFS)
-CFLAGS    = $(CINCLUDES) $(CDEFS)
+CFLAGS    = $(COPTS) $(CINCLUDES) $(CDEFS)
 FOPTS     = -g
 FINCLUDES = $(CINCLUDES)
-#FFLAGS    = $(FOPTS) $(FINCLUDES)
-FFLAGS    =  $(FINCLUDES)
+FFLAGS    = $(FOPTS) $(FINCLUDES)
 CXXOPTS   = $(COPTS) -Wno-deprecated
 CXXINCLUDES = $(CINCLUDES) -I..
 CXXDEFS   = $(CDEFS)
 IFLAGS_BXX = -I../babel-runtime/sidl
-#CXXFLAGS  = $(CXXOPTS) $(CXXINCLUDES) $(CXXDEFS) $(IFLAGS_BXX)
-CXXFLAGS  = $(CXXINCLUDES) $(CXXDEFS) $(IFLAGS_BXX)
+CXXFLAGS  = $(CXXOPTS) $(CXXINCLUDES) $(CXXDEFS) $(IFLAGS_BXX)
 IF90FLAGS = -I../babel/bHYPREClient-F90
 F90FLAGS = $(FFLAGS) $(IF90FLAGS)
 
 
-#LINKOPTS  = $(COPTS)
-LINKOPTS  = $(LDFLAGS)
+LINKOPTS  = $(COPTS)
 LIBS      = -L$(HYPRE_DIR)/lib -lHYPRE -lm
-LFLAGS    = $(LINKOPTS) $(LIBS) 
+LFLAGS    = $(LINKOPTS) $(LIBS) -lstdc++
 LFLAGS_B =\
  -L${HYPRE_DIR}/lib\
  -lbHYPREClient-C\
@@ -72,23 +65,29 @@ LFLAGS90 =
 ########################################################################
 # List of all programs to be compiled
 ########################################################################
-#ALLPROGS = ex1 ex2 ex3 ex4 ex5 ex5f ex6 ex7 ex8 ex9 ex10 ex11 ex12 ex12f \
-#           ex13 ex14 ex15 ex16
-ALLPROGS = ex1 ex2 ex3 ex4 ex5 ex5f ex6 ex7 ex8 ex9 ex11 ex12 ex12f \
+ALLPROGS = ex1 ex2 ex3 ex4 ex5 ex5f ex6 ex7 ex8 ex9 ex10 ex11 ex12 ex12f \
            ex13 ex14 ex15 ex16
-64BITPROGS = ex5big ex15big
+BIGINTPROGS = ex5big ex15big
 BABELPROGS = ex5b ex5b77 ex5bxx ex6b ex6b77
 # ... ex5bp and ex5b90 are not in BABELPROGS because they require a
 # software environment which many people haven't set up.
 FORTRANPROGS = ex5f ex12f
+MAXDIMPROGS = ex17 ex18
+COMPLEXPROGS = ex18comp
 
 all: $(ALLPROGS)
 
-64bit: $(64BITPROGS)
+default: all
+
+bigint: $(BIGINTPROGS)
 
 babel: $(BABELPROGS)
 
 fortran: $(FORTRANPROGS)
+
+maxdim: $(MAXDIMPROGS)
+
+complex: $(COMPLEXPROGS)
 
 ########################################################################
 # Example 1
@@ -118,7 +117,7 @@ ex4: ex4.o
 # Example 5
 ########################################################################
 ex5: ex5.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 5 with 64-bit integers
@@ -130,7 +129,7 @@ ex5big: ex5big.o
 # Example 5 Fortran 77
 ########################################################################
 ex5f: ex5f.o
-	$(F77) -o $@ $^ $(LFLAGS77) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS)
+	$(F77) -o $@ $^ $(LFLAGS77)
 
 ########################################################################
 # Example 5 Babel C
@@ -190,50 +189,49 @@ ex8: ex8.o
 # Example 9
 ########################################################################
 ex9: ex9.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
-
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 10
 ########################################################################
 ex10: ex10.o
-	$(CXX) -o $@ $^ $(LFLAGS) 
+	$(CXX) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 11
 ########################################################################
 ex11: ex11.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 12
 ########################################################################
 ex12: ex12.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 12 Fortran 77
 ########################################################################
 ex12f: ex12f.o
-	$(F77) -o $@ $^ $(LFLAGS77) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(F77) -o $@ $^ $(LFLAGS77)
 
 ########################################################################
 # Example 13
 ########################################################################
 ex13: ex13.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 14
 ########################################################################
 ex14: ex14.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 15
 ########################################################################
 ex15: ex15.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Example 15 with 64-bit integers
@@ -245,20 +243,42 @@ ex15big: ex15big.o
 # Example 16
 ########################################################################
 ex16: ex16.o
-	$(CC) -o $@ $^ $(LFLAGS) $(LAPACKLIBDIRS) $(LAPACKLIBS) $(BLASLIBDIRS) $(BLASLIBS) $(FLIBS)
+	$(CC) -o $@ $^ $(LFLAGS)
+
+########################################################################
+# Example 17
+########################################################################
+ex17: ex17.o
+	$(CC) -o $@ $^ $(LFLAGS)
+
+########################################################################
+# Example 18
+########################################################################
+ex18: ex18.o
+	$(CC) -o $@ $^ $(LFLAGS)
+
+########################################################################
+# Example 18 (complex)
+########################################################################
+ex18comp: ex18comp.o
+	$(CC) -o $@ $^ $(LFLAGS)
 
 ########################################################################
 # Clean up
 ########################################################################
 clean:
 	rm -f $(ALLPROGS:=.o)
-	rm -f $(64BITPROGS:=.o)
+	rm -f $(BIGINTPROGS:=.o)
 	rm -f $(BABELPROGS:=.o)
 	rm -f $(FORTRANPROGS:=.o)
+	rm -f $(MAXDIMPROGS:=.o)
+	rm -f $(COMPLEXPROGS:=.o)
 	cd vis; make clean
 distclean: clean
 	rm -f $(ALLPROGS) $(ALLPROGS:=*~)
-	rm -f $(64BITPROGS) $(64BITPROGS:=*~)
+	rm -f $(BIGINTPROGS) $(BIGINTPROGS:=*~)
 	rm -f $(BABELPROGS) $(BABELPROGS:=*~)
 	rm -f $(FORTRANLPROGS) $(FORTRANPROGS:=*~)
+	rm -f $(MAXDIMPROGS) $(MAXDIMPROGS:=*~)
+	rm -f $(COMPLEXPROGS) $(COMPLEXPROGS:=*~)
 	rm -rf $(BABELPROGS:=*-pp.f90)
