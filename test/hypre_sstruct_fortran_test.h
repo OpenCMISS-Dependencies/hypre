@@ -2,13 +2,6 @@
  *  Definitions of sstruct fortran interface routines
  *****************************************************************************/
 
-// CMake generated mangling header
-#include <HYPRE_FC.h>
-#define hypre_F90_NAME(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
-#define hypre_F90_IFACE(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
-#define hypre_F90_NAME_BLAS(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
-#define hypre_F90_NAME_LAPACK(name,NAME) HYPRE_FMANGLE_GLOBAL(name,NAME)
-
 #define HYPRE_SStructGraphCreate \
         hypre_F90_NAME(fhypre_sstructgraphcreate, FHYPRE_SSTRUCTGRAPHCREATE)
 extern void hypre_F90_NAME(fhypre_sstructgraphcreate, FHYPRE_SSTRUCTGRAPHCREATE)

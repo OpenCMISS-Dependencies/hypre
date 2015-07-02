@@ -18,6 +18,7 @@ SET(HYPRE_USING_OPENMP ${WITH_OPENMP})
 option(HYPRE_USING_FEI            "Use FEI" ON)
 option(HYPRE_USING_MLI            "Use MLI" ON)
 option(WITH_SUPERLU "Use SuperLU routines (only applicable if FEI is built)" ON)
+set(HYPRE_USING_FEI YES)
 
 if (HYPRE_BIGINT)
   set (HYPRE_USING_FEI OFF CACHE BOOL "" FORCE)
