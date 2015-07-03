@@ -4,7 +4,10 @@
 # ADDTEST(ams_$4\.$5 $1 $2 "$3")\R
 # in Eclipse.
 # See TEST_* subfolders.
-
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+    FILES_MATCHING PATTERN "mfem*")
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}
+    FILES_MATCHING PATTERN "aFEM*")
 #=============================================================================
 # ams: Run through solvers
 #=============================================================================

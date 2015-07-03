@@ -68,12 +68,10 @@ endforeach()
 
 # The test scripts *.jobs have been converted using the regular expressions
 # See TEST_* subfolders for details
-add_executable(helper argumenthelper.c)
+#add_executable(helper argumenthelper.c)
 
 set(TESTRUNNER ${CMAKE_CURRENT_SOURCE_DIR}/TestRunner.cmake)
 macro(ADDTEST NAME NPROC TARGET ARGS)
-    message(STATUS "Called ADDTEST from ${CMAKE_CURRENT_BINARY_DIR}")
-    #if (_DO_)
     add_test(NAME ${NAME}
      COMMAND ${CMAKE_COMMAND} 
     -DMPIEXEC=${MPIEXEC}
@@ -86,11 +84,16 @@ macro(ADDTEST NAME NPROC TARGET ARGS)
     -DWD=${CMAKE_CURRENT_BINARY_DIR}
     -P ${TESTRUNNER}
     )
-    #endif()
 endmacro()
-#add_subdirectory(TEST_ij)
-#add_subdirectory(TEST_ams)
+add_subdirectory(TEST_ams)
+add_subdirectory(TEST_ij)
 add_subdirectory(TEST_fac)
 if (HYPRE_USING_FEI)
-    #add_subdirectory(TEST_fei)
+    add_subdirectory(TEST_fei)
+endif()
+add_subdirectory(TEST_sstruct)
+add_subdirectory(TEST_struct)
+add_subdirectory(TEST_timing)
+if (BUILD_EXAMPLES)
+    add_subdirectory(TEST_examples)
 endif()

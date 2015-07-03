@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.0)
 project(HYPRE VERSION 2.10.0 LANGUAGES C CXX Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+option(BUILD_EXAMPLES "${PROJECT_NAME} - Build examples" ON)
 set(PACKAGE_CONFIG_DIR "lib/cmake" CACHE STRING "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)")
 
 # Configuration options
@@ -147,6 +148,10 @@ install(FILES
     ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-version.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/hypre-config-dependencies.cmake
     DESTINATION ${PACKAGE_CONFIG_DIR})
+
+if (BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 
 if (BUILD_TESTS)
     enable_testing()
