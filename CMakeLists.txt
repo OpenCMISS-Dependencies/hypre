@@ -114,6 +114,10 @@ endif ()
 add_library(hypre ${HYPRE_SOURCES} ${FEI_LIBS})
 set_target_properties(hypre PROPERTIES OUTPUT_NAME hypre-${HYPRE_VERSION})
 target_link_libraries(hypre PUBLIC blas lapack ${MPI_C_LIBRARIES})
+find_library(M_LIB m)
+if (M_LIB)
+    target_link_libraries(hypre PUBLIC m)
+endif()
 if (HYPRE_USING_FEI)
     target_include_directories(hypre PUBLIC 
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/FEI_mv/fei-base>
