@@ -63,6 +63,10 @@ foreach(IDX RANGE 1 ${NUMTESTS})
         add_executable(${EXEC_NAME} ${_TMP})
         target_link_libraries (${EXEC_NAME} hypre ${HYPRE_LIBS})
         target_compile_definitions(${EXEC_NAME} PRIVATE HYPRE_TIMING HYPRE_FORTRAN)
+	# For Intel, we need the Fortran linker 
+        if (CMAKE_Fortran_COMPILER_ID STREQUAL Intel AND "${_TMP}" MATCHES ".f$")
+            set_target_properties(${EXEC_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
+        endif()
     endif() 
 endforeach()
 
