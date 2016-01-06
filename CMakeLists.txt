@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.3)
 # This is HYPRE version 2.10.0b from http://ftp.mcs.anl.gov/pub/petsc/externalpackages/hypre-2.10.0b.tar.gz
 project(HYPRE VERSION 2.10.0 LANGUAGES C CXX Fortran)
 
