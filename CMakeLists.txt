@@ -62,6 +62,12 @@ if (HYPRE_USING_OPENMP)
   endif()
 endif()
 
+if (MSVC)
+    set(INLINE __inline)
+else()
+    set(INLINE inline)
+endif()
+
 # Configure a header file to pass CMake settings to the source code
 configure_file(
   "${PROJECT_SOURCE_DIR}/config/HYPRE_config.h.cmake.in"
