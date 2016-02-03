@@ -103,11 +103,10 @@ include_directories(struct_ls)
 include_directories(sstruct_mv)
 include_directories(sstruct_ls)
 
-# Turn optimization off for this file
-#set_source_files_properties (lapack/dlamch.c PROPERTIES COMPILE_FLAGS -O0)
-
 if (MSVC)
   add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+  # Turn optimization off for this file - hangs if any optimization is done (VS 2013)
+  set_source_files_properties (struct_ls/pfmg3_setup_rap.c PROPERTIES COMPILE_FLAGS /Od)
 endif ()
 
 if (HYPRE_USING_FEI)

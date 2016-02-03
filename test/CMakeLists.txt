@@ -55,6 +55,11 @@ endif()
 #set(TEST6 ex7_for fstruct_mv.f fstruct_ls.f fsstruct_mv.f fsstruct_ls.f ex7_for)
 #set(TEST7 for_maxwell fparcsr_mv.f fsstruct_mv.f fsstruct_ls.f for_maxwell)
 
+if (MSVC)
+  # Turn optimization off for this file - hangs if any optimization is done (VS 2013)
+  set_source_files_properties (sstruct.c sstruct_fac.c ${CMAKE_CURRENT_BINARY_DIR}/cxx_sstruct.cpp PROPERTIES COMPILE_FLAGS /Od)
+endif ()
+
 foreach(IDX RANGE 1 ${NUMTESTS})
     if (TEST${IDX})
         set(_TMP ${TEST${IDX}})
