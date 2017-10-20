@@ -30,6 +30,8 @@ if (HYPRE_SEQUENTIAL)
   set (HYPRE_NO_GLOBAL_PARTITION OFF CACHE BOOL "" FORCE)
 endif ()
 
+# Find BLAS separately so we can use 'blas' target.
+find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 if (NOT HYPRE_SEQUENTIAL)
   find_package(MPI QUIET REQUIRED)
