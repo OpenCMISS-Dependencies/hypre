@@ -72,3 +72,9 @@
 
 /* As F77_FUNC, but for C identifiers containing underscores. */
 #define HYPRE_F77_FUNC_(name,NAME) name ## __
+
+/*
+ * Deal with bug in MPI standard
+ * http://www.mpich.org/static/downloads/3.2.1/mpich-3.2.1-userguide.pdf#special issues in C++
+ */
+#define MPICH_IGNORE_CXX_SEEK

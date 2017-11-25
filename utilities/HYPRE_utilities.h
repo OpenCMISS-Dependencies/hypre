@@ -22,13 +22,6 @@
 #include <HYPRE_config.h>
 
 #ifndef HYPRE_SEQUENTIAL
-/*
- * Deal with bug in MPI standard
- * http://www.mpich.org/static/downloads/3.2.1/mpich-3.2.1-userguide.pdf#special issues in C++
- */
-#undef SEEK_SET
-#undef SEEK_END
-#undef SEEK_CUR
 #include "mpi.h"
 #endif
 
