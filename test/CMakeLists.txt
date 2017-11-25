@@ -10,7 +10,7 @@ endif()
 
 # Set MPI compile flags
 if (NOT HYPRE_SEQUENTIAL)
-    list (APPEND HYPRE_LIBS ${MPI_C_LIBRARIES})
+    #list (APPEND HYPRE_LIBS ${MPI_C_LIBRARIES})
 endif()
 
 if (MSVC)
@@ -66,7 +66,7 @@ foreach(IDX RANGE 1 ${NUMTESTS})
         list(GET _TMP 0 EXEC_NAME)
         list(REMOVE_AT _TMP 0)
         add_executable(${EXEC_NAME} ${_TMP})
-        target_link_libraries (${EXEC_NAME} hypre ${HYPRE_LIBS})
+        target_link_libraries (${EXEC_NAME} PUBLIC hypre ${HYPRE_LIBS})
         target_compile_definitions(${EXEC_NAME} PRIVATE HYPRE_TIMING HYPRE_FORTRAN)
 	# For Intel, we need the Fortran linker 
         if (CMAKE_Fortran_COMPILER_ID STREQUAL Intel AND "${_TMP}" MATCHES ".f$")

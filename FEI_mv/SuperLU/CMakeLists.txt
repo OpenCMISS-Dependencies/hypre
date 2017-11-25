@@ -55,5 +55,6 @@ set(HYPRE_superlu_SRCS
 
 add_definitions(-DNO_TIMER)
 add_library(HYPRE_superlu OBJECT ${HYPRE_superlu_SRCS})
+target_include_directories(HYPRE_superlu PUBLIC $<TARGET_PROPERTY:MPI::MPI_C,INTERFACE_INCLUDE_DIRECTORIES>)
 
 install (FILES ${HYPRE_superlu_HEADERS} DESTINATION include)

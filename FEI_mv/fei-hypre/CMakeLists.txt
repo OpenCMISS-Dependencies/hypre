@@ -70,5 +70,9 @@ if (WITH_SUPERLU AND NOT SUPERLU_INTERNAL)
     target_include_directories(HYPRE_fei PRIVATE 
         $<TARGET_PROPERTY:superlu,INTERFACE_INCLUDE_DIRECTORIES>)
 endif()
+if (NOT HYPRE_SEQUENTIAL)
+    target_include_directories(HYPRE_fei PRIVATE
+        $<TARGET_PROPERTY:MPI::MPI_C,INTERFACE_INCLUDE_DIRECTORIES>)
+endif ()
 
 install (FILES ${HYPRE_fei_HEADERS} DESTINATION include/hypre)
